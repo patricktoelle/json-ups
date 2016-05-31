@@ -3,6 +3,16 @@ from sh import upsc
 
 import json
 import sys
+from json import encoder
+encoder.FLOAT_REPR = lambda o: format(o, '.2f')
+
+
+
+def num(s):
+    try:
+        return float(s)
+    except ValueError:
+        return s
 
 
 def main():
@@ -14,8 +24,6 @@ def main():
 
     data = {}
     status = upsc(device)
-    print(status)
-    # ups.timer.start: 0
 
     for item in status:
         first, second = item.split(': ')
@@ -24,7 +32,7 @@ def main():
         second = second.strip()
         for index, key in enumerate(keys):
             if index == len(keys) - 1:
-                t = t.setdefault(key, {'value': second})
+                t = t.setdefault(key, {'value': num(second)})
             else:
                 t = t.setdefault(key, {})
 
